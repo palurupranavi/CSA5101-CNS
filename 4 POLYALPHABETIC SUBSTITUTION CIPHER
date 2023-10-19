@@ -1,0 +1,51 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+int main()
+{
+	char str[100],key[100];
+	printf("\nenter the plaintext: ");
+	scanf("%s",&str);
+	printf("\nenter the key value: ");
+	scanf("%s",&key);
+	int i,j,len,keylen;
+	len=strlen(str);
+	keylen=strlen(key);
+	char newkey[len],encry[len],decry[len];
+	for(i=0,j=0;i<len;++i,++j)
+	{
+		if(j==keylen)
+			j=0;
+		newkey[i]=key[j];
+		
+	}
+	newkey[i]='\0';
+	for(i=0;i<len;++i)
+	{
+		if(islower(str[i]))
+		{
+			encry[i]=((str[i]-'a'+newkey[i]-'a')%26)+'a';
+		}
+		else
+		{
+			encry[i]=((str[i]-'A'+newkey[i]-'a')%26)+'A';
+		}
+	}
+	encry[i]='\0';
+	for(i=0;i<len;++i)
+	{
+		if(islower(str[i]))
+		{
+			decry[i]=(((encry[i]-'a'+newkey[i]+'a')+26)%26)+'a';
+		}
+		else
+		{
+			decry[i]=(((encry[i]-'A'+newkey[i]+'a')+26)%26)+'A';
+		}
+	}
+	decry[i]='\0';
+	printf("\nthe new key:%s",newkey);
+	printf("\nencrypted message:%s",encry);
+	printf("\nthe decryption message:%s",decry);
+	
+}
