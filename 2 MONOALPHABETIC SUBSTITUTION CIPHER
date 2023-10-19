@@ -1,0 +1,42 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+int main()
+{
+char str[20],c[20];
+int i,len,k=3;//for monoalphabetic the key is fixed for every conversion of plain to cipher text..
+printf("enter the string: ");
+scanf("%s",&str);
+len=strlen(str);
+printf("the length of the string:%d\n",len);
+printf("\nencryption: ");
+for(i=0;i<len;i++)
+{
+	if(islower(str[i]))
+	{
+	c[i]=((str[i]-'a'+k)%26)+'a';
+	printf("%c",c[i]);
+    } 
+    else
+    {
+    	c[i]=((str[i]-'A'+k)%26)+'A';
+	    printf("%c",c[i]);
+	}
+}
+for (i = 0; i < len; i++) {
+        str[i] = c[i];
+    }
+printf("\ndecryption: ");
+for(i=0;i<len;i++)
+{
+	if(isupper(c[i]))
+	{
+		str[i]=((c[i]-'A'-k+26)%26)+'A';
+	}
+	else
+	{
+	str[i]=((c[i]-'a'-k+26)%26)+'a';
+	printf("%c",str[i]);
+    }
+}
+}
