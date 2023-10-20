@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/bn.h>
+#include <openssl/dsa.h>
+
+// Generate a random DSA key pair
+DSA* generate_dsa_key_pair() {
+    DSA* dsa = DSA_new();
+    if (!dsa) {
+        fprintf(stderr, "Error: DSA_new() failed\n");
+        exit(1);
+    }
+    BIGNUM *p, *q, *g, *priv_key, *pub_key;
+    p = BN_new();
+    q = BN_new();
+    g = BN_new();
+    priv_key = BN_new();
+    pub_key = BN_new();
+    
+    // Replace these values with your own prime numbers
+    BN_hex2bn(&p, "F0EE1E1D8E9A840DDCD91A4A0A19CEFC5F9F212D7AF5E6EE25CC7F2146B4D9F8FBB6203EAE4FF54519A65EF25587D16DA65F2A7538693293DB762D2AEC55A8457");
+    BN_hex2bn(&q, "BA492FF88D4DB70C4C038D7E5B13E7A9F0E2E4D3A");
+    BN_hex2bn(&g, "2E4EE8E76DCA49CA7970079B4E2B1ACD6A0C8F207C91E4B04E6EAF33DE796D92FD0A44D98CE69C2C9BF9E7738BACA0AA9DECE3E3D505A1BD83FC00E61413C2D63");
+    
+    DSA_generate_key(dsa);
+    return dsa;
+}
+
+// Sign a message using DSA
+DSA_SIG* sign_message(const DSA* dsa, const char* message) {
+    BIGNUM *r = BN_new();
+    BIGNUM *s = BN_new();
+    DSA_SIG *signature = DSA_do_sign((const unsigned char*)message, strlen(message), dsa);
+    if (!signature) {
+        fprintf(stderr, "Error: DSA_do_sign() failed\n");
+        exit(1);
+    }
+    return signature;
+}
+
+int main() {
+    DSA* dsa = generate_dsa_key_pair();
+    const char* message = "Hello, DSA!";
+    DSA_SIG* signature1 = sign_message(dsa, message);
+
+    // Changing 'k' should result in a different signature
+    DSA_SIG* signature2 = sign_message(dsa, message);
+
+    if (DSA_do_verify((const unsigned char*)message, strlen(message), signature1, dsa)) {
+        printf("Signature 1 is valid.\n");
+    } else {
+        printf("Signature 1 is invalid.\n");
+    }
+
+    if (DSA_do_verify((const unsigned char*)message, strlen(message), signature2, dsa)) {
+        printf("Signature 2 is valid.\n");
+    } else {
+        printf("Signature 2 is invalid.\n");
+    }
+
+    DSA_free(dsa);
+    DSA_SIG_free(signature1);
+    DSA_SIG_free(signature2);
+
+    return 0;
+}
+
