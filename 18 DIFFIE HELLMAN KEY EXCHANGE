@@ -1,0 +1,18 @@
+#include<stdio.h>
+#include<math.h>
+int main(){
+	int q,alpha,xa,xb,ya,yb,ka,kb;
+	printf("Enter public number1 : \n");
+	scanf("%d",&q);
+	printf("Enter public number2 : \n");
+	scanf("%d",&alpha);
+	printf("Enter private number1 : \n");
+	scanf("%d",&xa);
+	printf("Enter private number2 : \n");
+	scanf("%d",&xb);
+	ya=fmod(pow(alpha,xa),q);
+	yb=fmod(pow(alpha,xb),q);
+	ka=fmod(pow(yb,xa),q);
+	kb=fmod(pow(ya,xb),q);
+	printf("secret key1 : %d\nsecret key2 : %d",ka,kb);	
+}
